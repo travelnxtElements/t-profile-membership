@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <title>t-profile-membership demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../t-shared-components/theme.html">
+    <link rel="import" href="../../t-header/t-header.html">
+    <link rel="import" href="../../iron-ajax/iron-ajax.html">
+    <link rel="import" href="../../t-text-container/travel-element-styles.html">
+    <link rel="import" href="../t-profile-membership.html">
+
+   <style is="custom-style" include="travel-element-styles">
+         h1 {
+                    margin: 10 auto;
+                    font-size: 22px;
+                    line-height: var(--t-header-size, 55px);
+                    font-weight: 300;
+                    @apply(--t-header-normal);
+            }
+      </style>
+  </head>
+  <body>
+
+            <template is="dom-bind" id="templatizer">
+                <t-profile-membership
+                   id="profileMembership"
+                   program-names="[[_getProgramsArray(programNames)]]"
+                   on-membership-info-save="membershipInfoSaved"
+                   selected-program="{{selectedProgram}}"
+                >
+                 <t-header
+                    icon="arrow-back"
+                    label="Add Membership"
+                    class="t-header">
+                    <div>
+                      <h1>Add Membership</h1>
+                    </div>                
+                </t-header>
+                <iron-ajax
+                    id="AjaxPost"
+                    url="http://qa-mystiquecode.tavisca.com/api/Flight/loyaltyprograms"
+                    params='{"cid":"bluegreenowner_mys", "token":"g1tixp00foqq5prafv2tyc0u"}'
+                    handle-as="json"
+                    content-type="application/json"
+                    method="POST"
+                    on-response="setProgramNames"
+                    >
+                 </iron-ajax>
+              </t-profile-membership>
+            </template>
+            <script>
+            (function () {
+                'use strict'
+                    window.addEventListener('WebComponentsReady', function(e) {
+                        var templatizer = document.getElementById('templatizer');
+                        var array=["UA"];
+                        var response=[];
+                        templatizer.$.AjaxPost.body=JSON.stringify(array)
+                        templatizer.$.AjaxPost.generateRequest();
+                        templatizer.setProgramNames=function(e){
+                                response=e.detail.response.result;
+                                templatizer.programNames=response;
+                        },
+                        templatizer._getProgramsArray=function(programs){
+                            if(!programs) {
+                                return [];
+                            }
+
+                            return programs
+                                .map(function(pgm) {
+                                    return pgm.lstOfMembershipProvider.map(function(m) { 
+                                        var label = m.code + ' - ' + pgm.name;
+                                        return { programName: pgm.name, airlineCode: m.code, label: label};
+                                    });
+                                })
+                                .reduce(function(arr, a) {
+                                    return arr.concat(a);
+                                }, []);
+                        },
+                        templatizer.membershipInfoSaved = function (e) {
+                            console.log(e.detail)
+                        };
+                   });
+            })();
+             </script>
+
+  </body>
+</html>

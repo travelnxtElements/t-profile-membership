@@ -1,0 +1,118 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-button/t-button.html">
+<link rel="import" href="../t-dropdown/t-dropdown.html">
+<link rel="import" href="../t-input/t-input.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+
+<!--
+    <h3>Details:</h3>
+        The `t-profile-membership` is a form component for displaying list of loyalty programs and saving program name,code and number.
+        It uses three components primarily, one being `t-dropdown` which is used to fetch loyalty programs and select one from the 
+        dropdown list.The second being `t-input` where a user can enter the program number and the last being `t-button` to save these 
+        above informations. 
+       
+        Following are its child components -
+        <ul>
+          <ol> 1.`t-dropdown`</ol>
+          <ol> 2.`t-input`</ol>
+          <ol> 3.`t-button`</ol> 
+        </ul>
+
+         
+
+    <h3>Events:</h3>
+        Following events are fired by this component.
+        <p>'_saveProfileMembership' - fired when user clicks on Save button to save the membership program selected.</p>
+          
+
+    <h3>Example:</h3>
+
+        <t-profile-membership>
+        
+        </t-profile-membership>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="t-profile-membership">
+            <style include="travel-element-styles">
+                t-button {
+                    display: block;
+                }                
+            </style>
+
+             <template>
+                    <!-- content tag to insert header component-->
+                    <content select=".t-header">
+                    </content>
+                   
+                    <div class='section-small'>
+                        <t-dropdown 
+                          label="Program Name" 
+                          id="programName" 
+                          name="programName" 
+                          dropdown-array="{{programNames}}"
+                          selected-item="{{selectedProgram}}"
+                          label-key="label" 
+                          value-key="programCode">
+                        </t-dropdown>
+
+                        <t-input id="programNumber" 
+                          name="programNumber" 
+                          label="Program Number" 
+                          class="margin-bottom-large">
+                        </t-input>
+                    </div>
+                   
+                    <t-button 
+                        class="primary row" 
+                        label="save"
+                        id="btnResetPassword"
+                        on-tap="_saveProfileMembership">
+                    </t-button>
+                     
+             </template>
+
+            <script>
+                Polymer({
+
+                  is: 't-profile-membership',
+
+                  properties: {
+                        /**
+                        * The programNames Array to populate the dropdown content
+                        * @type {Array}
+                        */
+                        programNames:{
+                            type:Array,
+                            notify:true
+                        },
+                        /**
+                        * The selected Program object from the dropdown
+                        * @type {Object}
+                        */
+                        selectedProgram:{
+                            type:Object,
+                            notify:true
+                        }
+
+                  },
+                    _saveProfileMembership:function(){
+                        if(this.$.programName.selectedItem && this.$.programNumber.value){
+                            let programs={
+                                "programCode":this.$.programName.selectedItem.split("-")[0].trim(""),
+                                "programName":this.$.programName.selectedItem.split("-")[1].trim("")
+                            };
+                            let programNumber=this.$.programNumber.value;
+                            this.selectedProgram={
+                                "programNumber":programNumber,
+                                "programs":programs
+                            }
+                            
+                            this.fire('membership-info-save', this.selectedProgram);
+                        }
+                    },
+                   
+                });
+            </script>
+</dom-module>
