@@ -9,7 +9,6 @@
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../../t-shared-components/theme.html">
-    <link rel="import" href="../../t-header/t-header.html">
     <link rel="import" href="../../iron-ajax/iron-ajax.html">
     <link rel="import" href="../../t-text-container/travel-element-styles.html">
     <link rel="import" href="../t-profile-membership.html">
@@ -29,18 +28,10 @@
             <template is="dom-bind" id="templatizer">
                 <t-profile-membership
                    id="profileMembership"
-                   program-names="[[_getProgramsArray(programNames)]]"
-                   on-membership-info-save="membershipInfoSaved"
+                   program-names="[[getProgramsArray(programNames)]]"
+                   program-number="{{programNumber}}"
                    selected-program="{{selectedProgram}}"
                 >
-                 <t-header
-                    icon="arrow-back"
-                    label="Add Membership"
-                    class="t-header">
-                    <div>
-                      <h1>Add Membership</h1>
-                    </div>                
-                </t-header>
                 <iron-ajax
                     id="AjaxPost"
                     url="http://qa-mystiquecode.tavisca.com/api/Flight/loyaltyprograms"
@@ -65,8 +56,9 @@
                         templatizer.setProgramNames=function(e){
                                 response=e.detail.response.result;
                                 templatizer.programNames=response;
-                        },
-                        templatizer._getProgramsArray=function(programs){
+                        }
+                        templatizer.programNumber="SGX-12345";
+                        templatizer.getProgramsArray= function(programs) {
                             if(!programs) {
                                 return [];
                             }
@@ -81,10 +73,8 @@
                                 .reduce(function(arr, a) {
                                     return arr.concat(a);
                                 }, []);
-                        },
-                        templatizer.membershipInfoSaved = function (e) {
-                            console.log(e.detail)
-                        };
+                        }
+                        
                    });
             })();
              </script>
