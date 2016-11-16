@@ -1,7 +1,30 @@
 {
   "name": "t-profile-membership",
+  "version": "0.0.0",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak Pal <spal@tavisca.com>",
+    "Ajinkya Tejankar <tejankarajinkya@gmail.com>",
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
   "description": "The component describes how a user can select memberships programs",
   "main": "t-profile-membership.html",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
     "t-text-container": "travelnxtelements/t-text-container#^1.1.2",
