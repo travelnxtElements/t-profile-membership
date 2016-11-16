@@ -29,8 +29,8 @@
                 <t-profile-membership
                    id="profileMembership"
                    program-names="[[getProgramsArray(programNames)]]"
-                   program-number="{{programNumber}}"
-                   selected-program="{{selectedProgram}}"
+                   program-Name-Label="label"
+                   program-Name-value-key="airlineCode"
                 >
                 <iron-ajax
                     id="AjaxPost"
@@ -57,7 +57,6 @@
                                 response=e.detail.response.result;
                                 templatizer.programNames=response;
                         }
-                        templatizer.programNumber="SGX-12345";
                         templatizer.getProgramsArray= function(programs) {
                             if(!programs) {
                                 return [];

@@ -46,8 +46,8 @@
                           name="programName" 
                           dropdown-array="{{programNames}}"
                           selected-item="{{selectedProgram}}"
-                          label-key="label" 
-                          value-key="programCode">
+                          label-key="[[programNameLabel]]" 
+                          value-key="[[programNameValueKey]]">
                         </t-dropdown>
 
                         <t-input id="programNumber" 
@@ -72,8 +72,10 @@
                          */
                         programNames:{
                             type:Array,
-                            notify:true
+                            notify:true,
+                            observer:'__setSelectedProgram'
                         },
+
                         /**
                          * The selected Program object from the dropdown.
                          * @type {Object}
@@ -82,6 +84,7 @@
                             type:String,
                             notify:true
                         },
+
                         /**
                          * The program Number provided by the user for the program selected.
                          * @type {Object}
@@ -91,11 +94,41 @@
                             notify:true
                         },
 
+                        /**
+                         * Pass the programNameLabel to set the key of the ProgramNames Array of objects which binds with label key 
+                         * of the program name dropdown.
+                         */
+                        programNameLabel: String,
+
+                        /**
+                         * Pass the programNameValueKey to set the key of the ProgramNames Array of objects which binds with value  
+                         * key of the program name dropdown.
+                         */
+                        programNameValueKey: String
+
                   },
-                    validate:function(){
-                       return (this.$.programName.validate() && this.$.programNumber.validate());
-                    },
-                   
+
+                  __setSelectedProgram: function(arr){
+                    if(arr.length <= 0){return;}
+                    if(this.selectedProgram){
+                      var item = this.selectedProgram;
+                      this.$.programName.selectedItem = null;
+                      setTimeout(function(){
+                        this.$.programName.selectedItem  = item;
+                      }.bind(this),10);
+                    }else{
+                      this.$.programName.querySelector('select').selectedIndex  = -1;
+                    }
+                  },
+                  
+                  validate:function(){
+                    var all = Polymer.dom(this.root).querySelectorAll('[required]'),
+                    isValid = true;
+                    all.forEach(function (element, index) {
+                        isValid = element.validate() && isValid;
+                    });
+                    return isValid;
+                  }                   
                 });
             </script>
 </dom-module>
